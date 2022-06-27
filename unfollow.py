@@ -2,9 +2,9 @@ import requests
 import threading
 import random
 
-from colorama import Fore
+from colorama import Fore, init
 
-
+init(convert=True)
 
 
 channel_name = input("Enter Channel: ")
@@ -75,9 +75,8 @@ def unfollow():
 
 
 def start():
-    threads = input("Enter amount of followers: ")
-    print("Sending followers")
-    for i in range(int(threads)):
+    print("Removing followers")
+    while True:
         threading.Thread(target=unfollow).start()
 
 
