@@ -2,7 +2,9 @@ import requests
 import threading
 import random
 
-from colorama import Fore
+from colorama import Fore, init
+
+init(convert=True)
 
 
 channel_name = input("Enter Channel: ")
@@ -68,10 +70,10 @@ def follow():
 
 
 
+
 def start():
-    threads = input("Enter amount of followers: ")
     print("Sending followers")
-    for i in range(int(threads)):
+    while True:
         threading.Thread(target=follow).start()
 
 
