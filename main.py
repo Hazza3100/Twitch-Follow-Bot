@@ -2,7 +2,10 @@ import requests
 import random
 import threading
 
-from colorama import Fore
+from colorama import Fore, init
+
+
+init(convert=True)
 
 def get_username(channel_name):
 
