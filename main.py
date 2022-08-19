@@ -1,11 +1,20 @@
-import requests
+import os
 import random
+import requests
 import threading
 
 from colorama import Fore, init
 
 
 init(convert=True)
+
+
+
+class stats():
+    sent = 0
+    error = 0
+
+
 
 def get_username(channel_name):
 
@@ -38,7 +47,7 @@ class Twitch():
 
     def follow():
         with sem:
-
+            os.system(f'title Success: {stats.sent} ^| Error: {stats.error}')
             channel_ID = get_username(channel_name)
 
             tokens = open('tokens.txt', 'r').read().splitlines()
@@ -65,13 +74,15 @@ class Twitch():
             data = '[{"operationName":"FollowButton_FollowUser","variables":{"input":{"disableNotifications":false,"targetID":"'+channel_ID+'"}},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"800e7346bdf7e5278a3c1d3f21b2b56e2639928f86815677a7126b093b2fdd08"}}}]'
             r = requests.post('https://gql.twitch.tv/gql', headers=headers, data=data)
             if r.status_code == 200:
+                stats.sent += 1
                 print(f"{Fore.GREEN}Followed {Fore.RESET}{channel_name}{Fore.RESET}\n")
             else:
+                stats.error += 1
                 print(F"{Fore.RED}Error{Fore.RESET}\n")
 
     def unfollow():
         with sem:
-
+            os.system(f'title Success: {stats.sent} ^| Error: {stats.error}')
             channel_ID = get_username(channel_name)
 
             tokens = open('tokens.txt', 'r').read().splitlines()
@@ -98,8 +109,10 @@ class Twitch():
             data = '[{"operationName":"FollowButton_UnfollowUser","variables":{"input":{"targetID":"'+channel_ID+'"}},"extensions":{"persistedQuery":{"version":1,"sha256Hash":"f7dae976ebf41c755ae2d758546bfd176b4eeb856656098bb40e0a672ca0d880"}}}]'
             r = requests.post('https://gql.twitch.tv/gql', headers=headers, data=data)
             if r.status_code == 200:
-                print(f"{Fore.GREEN}Followed {Fore.RESET}{channel_name}{Fore.RESET}\n")
+                stats.sent += 1
+                print(f"{Fore.GREEN}[+ ]Follow {Fore.RESET}{channel_name}{Fore.RESET}\n")
             else:
+                stats.error += 1
                 print(F"{Fore.RED}Error{Fore.RESET}\n")
 
 
