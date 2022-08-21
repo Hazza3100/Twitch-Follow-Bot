@@ -1,3 +1,4 @@
+from itertools import cycle
 import os
 import random
 import requests
@@ -37,6 +38,18 @@ def get_username(channel_name):
     return r.json()['data']['userOrError']['id']
 
 
+class Choose_Cookie():
+
+    def get_token():
+        with open('tokens.txt', 'r') as f:
+            tokens = [line.strip('\n') for line in f]
+        return tokens
+    cookie = get_token()
+    tokens_loop = cycle(cookie)
+
+
+
+
 sem = threading.Semaphore(200)
 
 
@@ -44,14 +57,12 @@ channel_name = input("Enter channel name > ")
 
 class Twitch():
 
-
     def follow():
         with sem:
             os.system(f'title Success: {stats.sent} ^| Error: {stats.error}')
             channel_ID = get_username(channel_name)
 
-            tokens = open('tokens.txt', 'r').read().splitlines()
-            token = random.choice(tokens)
+            token = next(Choose_Cookie.tokens_loop)
 
             headers = {
                 'Accept': '*/*',
@@ -75,7 +86,7 @@ class Twitch():
             r = requests.post('https://gql.twitch.tv/gql', headers=headers, data=data)
             if r.status_code == 200:
                 stats.sent += 1
-                print(f"{Fore.GREEN}Followed {Fore.RESET}{channel_name}{Fore.RESET}\n")
+                print(f"{Fore.GREEN}[+] Followed {Fore.RESET}{channel_name}{Fore.RESET}\n")
             else:
                 stats.error += 1
                 print(F"{Fore.RED}Error{Fore.RESET}\n")
@@ -85,9 +96,8 @@ class Twitch():
             os.system(f'title Success: {stats.sent} ^| Error: {stats.error}')
             channel_ID = get_username(channel_name)
 
-            tokens = open('tokens.txt', 'r').read().splitlines()
-            token = random.choice(tokens)
-            
+            token = next(Choose_Cookie.tokens_loop)
+
             headers = {
                 'Accept': '*/*',
                 'Accept-Language': 'en-GB',
@@ -110,7 +120,7 @@ class Twitch():
             r = requests.post('https://gql.twitch.tv/gql', headers=headers, data=data)
             if r.status_code == 200:
                 stats.sent += 1
-                print(f"{Fore.GREEN}[+ ]Follow {Fore.RESET}{channel_name}{Fore.RESET}\n")
+                print(f"{Fore.GREEN}[+] Unfollow {Fore.RESET}{channel_name}{Fore.RESET}\n")
             else:
                 stats.error += 1
                 print(F"{Fore.RED}Error{Fore.RESET}\n")
