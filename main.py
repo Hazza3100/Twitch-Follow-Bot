@@ -1,9 +1,8 @@
-from itertools import cycle
 import os
-import random
 import requests
 import threading
 
+from itertools import cycle
 from colorama import Fore, init
 
 
