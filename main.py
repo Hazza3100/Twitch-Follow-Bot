@@ -9,7 +9,6 @@ from colorama import Fore, init
 init(convert=True)
 
 
-
 class stats():
     sent = 0
     error = 0
